@@ -6,11 +6,9 @@
     const allUser = await prisma.user.findMany()
     console.log(allUser)
   }
-  
-  main()
 </script>
 
-<div class="p-8">
+<div>
   <Alert>
     <span class="font-medium">Info alert!</span>
     Change a few things up and try submitting again.
