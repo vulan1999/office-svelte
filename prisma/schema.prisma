@@ -11,22 +11,22 @@ model Unit {
   id           Int    @id @default(autoincrement())
   name         String
   parentUnitId Int?
-  Unit         Unit?  @relation("UnitToUnit", fields: [parentUnitId], references: [id])
-  other_Unit   Unit[] @relation("UnitToUnit")
-  User         User[]
+  parentUnit   Unit?  @relation("UnitToUnit", fields: [parentUnitId], references: [id])
+  childUnit    Unit[] @relation("UnitToUnit")
+  unitMembers  User[]
 
   @@index([parentUnitId], map: "Unit_parentUnitId_fkey")
 }
 
 model User {
-  id         Int     @id @default(autoincrement())
-  name       String?
-  email      String  @unique
-  unitId     Int?
-  managerId  Int?
-  User       User?   @relation("UserToUser", fields: [managerId], references: [id])
-  other_User User[]  @relation("UserToUser")
-  Unit       Unit?   @relation(fields: [unitId], references: [id])
+  id        Int     @id @default(autoincrement())
+  name      String?
+  email     String  @unique
+  unitId    Int?
+  managerId Int?
+  manager   User?   @relation("UserToUser", fields: [managerId], references: [id])
+  members   User[]  @relation("UserToUser")
+  unit      Unit?   @relation(fields: [unitId], references: [id])
 
   @@index([managerId], map: "User_managerId_fkey")
   @@index([unitId], map: "User_unitId_fkey")

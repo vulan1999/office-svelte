@@ -1,11 +1,5 @@
 <script>
   import { Alert } from 'flowbite-svelte';
-  import prisma from '$lib/prisma'
-  
-  const main = async () => {
-    const allUser = await prisma.user.findMany()
-    console.log(allUser)
-  }
 </script>
 
 <div>

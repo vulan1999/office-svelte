@@ -1,15 +1,26 @@
 import prisma from '$lib/prisma';
 import { json } from '@sveltejs/kit';
 
-export const POST = async ({ request }) => {
-	const { name, email, unit, manager } = await request.json();
-	const createdUser = await prisma.user.create({
-		data: {
-			name,
-			email,
-			unit,
-			manager
+export async function GET() {
+	const users = await prisma.user.findMany({
+		select: {
+			id: true,
+			name: true,
+			email: true,
+			manager: {
+				select: {
+					id: true,
+					name: true,
+					email: true
+				}
+			},
+			unit: {
+				select: {
+					id: true,
+					name: true
+				}
+			}
 		}
 	});
-	return json(createdUser);
-};
+	return json(users);
+}

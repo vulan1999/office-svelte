@@ -5,7 +5,9 @@
     Sidebar, 
     SidebarGroup, 
     SidebarItem, 
-    SidebarWrapper, 
+    SidebarWrapper,
+    SidebarDropdownWrapper,
+    SidebarDropdownItem,
     Navbar, 
     NavBrand, 
     NavHamburger, 
@@ -13,18 +15,33 @@
     Drawer,
     CloseButton
   } from 'flowbite-svelte'
-  import { HomeSolid, UsersSolid } from 'flowbite-svelte-icons'
+  import { HomeSolid, GridSolid, UsersSolid, UserGroupSolid } from 'flowbite-svelte-icons';
+  import { onMount } from 'svelte';
+  
   $:activeUrl = $page.url.pathname;
   let sideBarUrls = [
     {
       label: "Home",
       href: "/",
+      items: [],
       iconComponent: HomeSolid
     },
     {
-      label: "Users",
-      hred: "/users",
-      iconComponent: UsersSolid
+      label: "Managements",
+      href: "/management",
+      items: [
+        {
+          label: "Users",
+          href: "/management/users",
+          iconComponent: UsersSolid
+        },
+        {
+          label: "Units",
+          href: "/management/units",
+          iconComponent: UserGroupSolid
+        }
+      ],
+      iconComponent: GridSolid
     }
   ]
   let width;
@@ -36,12 +53,22 @@
     drawerHidden = true;
   }
 
+  onMount(()=>{
+    if(width >= 1024){
+      drawerHidden = false;
+    }
+    else{
+      drawerHidden = true;
+    }
+  });
+
   const toggleDrawer = () => {
     drawerHidden = !drawerHidden;
   }
 
-  let activeClass = 'flex items-center p-2 text-base font-bold text-primary-900 bg-primary-200 rounded-lg hover:bg-primary-100';
-  let nonActiveClass = 'flex items-center p-2 text-base font-normal rounded-lg hover:bg-primary-100';
+  let activeClass = 'flex items-center p-2 text-base font-bold text-white bg-primary-500 rounded-lg hover:bg-primary-100 hover:text-black';
+  let activeDropdownItemClass = "flex items-center p-2 pl-11 text-base font-bold text-white bg-primary-500 rounded-lg hover:bg-primary-100"
+  let nonActiveClass = 'flex items-center p-2 text-base font-normal rounded-lg hover:bg-primary-200 hover:text-white';
 </script>
 
 <svelte:window bind:innerWidth={width} />
@@ -64,7 +91,7 @@
   backdrop={false}
   leftOffset="top-15 left-0 h-screen w-full lg:w-80"
   activateClickOutside={false}
-  divClass = "overflow-y-auto z-50 p-4 bg-gray-50"
+  divClass = "overflow-y-auto z-50 p-2 bg-gray-50 border-r"
 >
   <div class="lg:hidden flex items-end">
     <CloseButton on:click={toggleDrawer} />
@@ -73,11 +100,27 @@
     <SidebarWrapper>
       <SidebarGroup>
         {#each sideBarUrls as sideBarUrl}
-        <SidebarItem label={sideBarUrl.label} href={sideBarUrl.href}>
-          <svelte:fragment slot="icon">
-            <svelte:component this={sideBarUrl.iconComponent} />
-          </svelte:fragment>
-        </SidebarItem>
+          {#if sideBarUrl.items.length === 0}
+            <SidebarItem label={sideBarUrl.label} href={sideBarUrl.href}>
+              <svelte:fragment slot="icon">
+                <svelte:component this={sideBarUrl.iconComponent} />
+              </svelte:fragment>
+            </SidebarItem>
+          {:else}
+            <SidebarDropdownWrapper label={sideBarUrl.label}>
+              <svelte:fragment slot="icon">
+                <svelte:component this={sideBarUrl.iconComponent} />
+              </svelte:fragment>
+              {#each sideBarUrl.items as item}
+                <SidebarDropdownItem 
+                  label={item.label} 
+                  href={item.href} 
+                  activeClass={activeDropdownItemClass} 
+                  active={item.href === $page.url.pathname} 
+                />
+              {/each}  
+            </SidebarDropdownWrapper>
+          {/if}
         {/each}
       </SidebarGroup>
     </SidebarWrapper>
@@ -85,7 +128,7 @@
 </Drawer>
 
 <div class="flex px-4 mx-auto w-full">
-  <main class="lg:ml-72 w-full mx-auto p-8">
+  <main class="lg:ml-80 w-full mx-auto p-8">
     <slot></slot>
   </main>
 </div>
