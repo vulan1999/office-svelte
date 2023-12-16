@@ -1,6 +1,5 @@
 <script>
   import {  
-    Table, 
     TableHead, 
     TableHeadCell, 
     TableBody, 
@@ -8,18 +7,17 @@
     TableBodyCell,
     TableSearch
   } from 'flowbite-svelte';
-  import { UserCircleSolid, UserGroupSolid } from 'flowbite-svelte-icons';
   export let data;
 
   let unitSearchTerm = ""
   $:filterUnits = data.units.filter((unit) => unit.name.toLowerCase().indexOf(unitSearchTerm.toLowerCase()) !== -1);
 </script>
 
-<TableSearch placeholder="Search by unit" hoverable={true} bind:inputValue={unitSearchTerm}>
+<TableSearch placeholder="Tìm kiếm Đơn vị/ Phòng ban" hoverable={true} bind:inputValue={unitSearchTerm}>
   <TableHead>
     <TableHeadCell>No</TableHeadCell>
-    <TableHeadCell>Tên phòng ban</TableHeadCell>
-    <TableHeadCell>Tên phòng ban trực thuộc</TableHeadCell>
+    <TableHeadCell>Tên đơn vị/ phòng ban</TableHeadCell>
+    <TableHeadCell>Tên đơn vị/ phòng ban trực thuộc</TableHeadCell>
   </TableHead>
   <TableBody>
     {#each filterUnits as unit, index}

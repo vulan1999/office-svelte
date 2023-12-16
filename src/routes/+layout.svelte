@@ -21,22 +21,22 @@
   $:activeUrl = $page.url.pathname;
   let sideBarUrls = [
     {
-      label: "Home",
+      label: "Trang chủ",
       href: "/",
       items: [],
       iconComponent: HomeSolid
     },
     {
-      label: "Managements",
+      label: "Quản trị",
       href: "/management",
       items: [
         {
-          label: "Users",
+          label: "Danh sách người dùng",
           href: "/management/users",
           iconComponent: UsersSolid
         },
         {
-          label: "Units",
+          label: "Đơn vị/ Phòng ban",
           href: "/management/units",
           iconComponent: UserGroupSolid
         }
