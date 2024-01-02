@@ -19,15 +19,24 @@ model Unit {
 }
 
 model User {
-  id        Int     @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   name      String?
-  email     String  @unique
+  email     String   @unique
   unitId    Int?
   managerId Int?
-  manager   User?   @relation("UserToUser", fields: [managerId], references: [id])
-  members   User[]  @relation("UserToUser")
-  unit      Unit?   @relation(fields: [unitId], references: [id])
+  manager   User?    @relation("UserToUser", fields: [managerId], references: [id])
+  members   User[]   @relation("UserToUser")
+  unit      Unit?    @relation(fields: [unitId], references: [id])
+  rankingId Int?
+  rank      Ranking? @relation(fields: [rankingId], references: [id])
 
   @@index([managerId], map: "User_managerId_fkey")
   @@index([unitId], map: "User_unitId_fkey")
+}
+
+model Ranking {
+  id           Int    @id @default(autoincrement())
+  name         String
+  rankingOrder Int?
+  User         User[]
 }
